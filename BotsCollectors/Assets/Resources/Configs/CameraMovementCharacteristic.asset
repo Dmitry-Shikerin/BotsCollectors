@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc9bb98960f44c2691a91803902babbe, type: 3}
+  m_Name: CameraMovementCharacteristic
+  m_EditorClassIdentifier: 
+  <RotateSpeed>k__BackingField: 10
+  <MovementSpeed>k__BackingField: 10
+  <ZoomSpeed>k__BackingField: 10
+  <MultiplierSpeed>k__BackingField: 10
+  <AngularSpeed>k__BackingField: 1
