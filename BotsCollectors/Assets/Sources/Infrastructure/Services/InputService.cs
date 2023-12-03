@@ -1,61 +1,86 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class InputService : MonoBehaviour
+namespace Sources.Infrastructure.Services
 {
-    private const string Vertical = "Vertical";
-    private const string Horizontal = "Horizontal";
-    private const string Multiplier = "Multiplier";
-    private const string MouseScrollWheel = "Mouse ScrollWheel";
-
-    public event Action<bool, bool> RotationAxis;
-    public event Action<Vector2> MovementAxis;
-    public event Action<float> MultiplayerAxis;
-    public event Action<float> ScrollWheelAxis;
-
-    private void Awake()
+    public class InputService : MonoBehaviour
     {
-        DontDestroyOnLoad(this);
-    }
+        private const string Vertical = "Vertical";
+        private const string Horizontal = "Horizontal";
+        private const string Multiplier = "Multiplier";
+        private const string MouseScrollWheel = "Mouse ScrollWheel";
 
-    void Update()
-    {
-        UpdateRotation();
-        UpdateMovementAxis();
-        UpdateMultiplayerAxis();
-        UpdateScrollWheelAxis();
-    }
+        public event Action<bool, bool> RotationAxis;
+        public event Action<Vector2> MovementAxis;
+        public event Action<float> MultiplayerAxis;
+        public event Action<float> ScrollWheelAxis;
+        public event Action Scanning;
+        public event Action SendCollector;
+        public event Action CreatureCollector;
 
-    private void UpdateRotation()
-    {
-        bool isLeftRotation = Input.GetKey(KeyCode.Q);
-        bool isRightRotation = Input.GetKey(KeyCode.E);
+        private void Awake()
+        {
+            DontDestroyOnLoad(this);
+        }
+
+        void Update()
+        {
+            UpdateRotation();
+            UpdateMovementAxis();
+            UpdateMultiplayerAxis();
+            UpdateScrollWheelAxis();
+            UpdateScanning();
+            UpdateSendCollector();
+            UpdateCreatureCollector();
+        }
+
+        private void UpdateRotation()
+        {
+            bool isLeftRotation = Input.GetKey(KeyCode.Q);
+            bool isRightRotation = Input.GetKey(KeyCode.E);
             
-        RotationAxis?.Invoke(isLeftRotation, isRightRotation);
-    }
+            RotationAxis?.Invoke(isLeftRotation, isRightRotation);
+        }
 
-    private void UpdateMovementAxis()
-    {
-        float horizontalInput = Input.GetAxis(Horizontal);
-        float verticalInput = Input.GetAxis(Vertical);
-        Vector2 movementDirection = new Vector2(horizontalInput, verticalInput);
+        private void UpdateMovementAxis()
+        {
+            float horizontalInput = Input.GetAxis(Horizontal);
+            float verticalInput = Input.GetAxis(Vertical);
+            Vector2 movementDirection = new Vector2(horizontalInput, verticalInput);
             
-        MovementAxis?.Invoke(movementDirection);
-    }
+            MovementAxis?.Invoke(movementDirection);
+        }
     
-    private void UpdateMultiplayerAxis()
-    {
-        float multiplier = Input.GetAxis(Multiplier);
+        private void UpdateMultiplayerAxis()
+        {
+            float multiplier = Input.GetAxis(Multiplier);
             
-        MultiplayerAxis?.Invoke(multiplier);
-    }
+            MultiplayerAxis?.Invoke(multiplier);
+        }
 
-    private void UpdateScrollWheelAxis()
-    {
-        float scrollWheelInput = Input.GetAxis(MouseScrollWheel);
+        private void UpdateScrollWheelAxis()
+        {
+            float scrollWheelInput = Input.GetAxis(MouseScrollWheel);
         
-        ScrollWheelAxis?.Invoke(scrollWheelInput);
+            ScrollWheelAxis?.Invoke(scrollWheelInput);
+        }
+
+        private void UpdateScanning()
+        {
+            if(Input.GetKeyDown(KeyCode.R))
+                Scanning?.Invoke();
+        }
+
+        private void UpdateSendCollector()
+        {
+            if(Input.GetKeyDown(KeyCode.F))
+                SendCollector?.Invoke();
+        }
+
+        private void UpdateCreatureCollector()
+        {
+            if(Input.GetKeyDown(KeyCode.T))
+                CreatureCollector?.Invoke();
+        }
     }
 }

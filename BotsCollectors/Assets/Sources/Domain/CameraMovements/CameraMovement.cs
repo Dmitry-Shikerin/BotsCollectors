@@ -1,5 +1,4 @@
 ﻿using System;
-using JetBrains.Annotations;
 using Sources.Domain.CameraMovements.CameraMovementCharacteristics;
 using UnityEngine;
 
@@ -13,14 +12,16 @@ namespace Sources.Domain.CameraMovements
 
         public CameraMovement(CameraMovementCharacteristic cameraMovementCharacteristic)
         {
-            _characteristic = cameraMovementCharacteristic ??
-                              throw new ArgumentNullException(nameof(cameraMovementCharacteristic));
+            //TODO как проверять на нулл монобехи вот таак
+            _characteristic = cameraMovementCharacteristic ? 
+                cameraMovementCharacteristic : 
+                throw new ArgumentNullException(nameof(cameraMovementCharacteristic));
         }
         
         public float AngleY { get; private set; }
         public float MovementSpeed => _characteristic.MovementSpeed;
         public float ZoomSpeed => _characteristic.ZoomSpeed;
-        public float AngularSpeed => _characteristic.AngularSpeed;
+        private float AngularSpeed => _characteristic.AngularSpeed;
 
         public void SetLeftRotation() => 
             AngleY -= AngularSpeed;
@@ -39,7 +40,6 @@ namespace Sources.Domain.CameraMovements
                    speed * Time.deltaTime;
         }
 
-        //TODO как заклемпить значение зума
         public Vector3 GetZoomDirection(float scrollWheelAxis, float speed)
         {
             return new Vector3(0, 0, scrollWheelAxis) * 

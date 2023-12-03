@@ -1,12 +1,12 @@
 ﻿using System;
-using JetBrains.Annotations;
 using Sources.Domain.CameraMovements;
-using Sources.PresentationsInterfaces.Vievs;
+using Sources.Infrastructure.Services;
+using Sources.PresentationsInterfaces.Views;
 using UnityEngine;
 
 namespace Sources.Controllers.CameraMovements
 {
-    public class CameraMovementPresenter
+    public class CameraMovementPresenter : PresenterBase
     {
         private readonly InputService _inputService;
         private readonly CameraMovement _cameraMovement;
@@ -25,13 +25,14 @@ namespace Sources.Controllers.CameraMovements
             ICameraMovementView cameraMovementView
         )
         {
-            _inputService = inputService ?? throw new ArgumentNullException(nameof(inputService));
+            _inputService = inputService ? inputService : 
+                throw new ArgumentNullException(nameof(inputService));
             _cameraMovement = cameraMovement ?? throw new ArgumentNullException(nameof(cameraMovement));
             _cameraMovementView = cameraMovementView ??
                                   throw new ArgumentNullException(nameof(cameraMovementView));
         }
 
-        public void Enable()
+        public override void Enable()
         {
             _inputService.MovementAxis += OnMovementAxis;
             _inputService.RotationAxis += OnRotationAxis;
@@ -39,7 +40,7 @@ namespace Sources.Controllers.CameraMovements
             _inputService.ScrollWheelAxis += OnScrollWheelAxis;
         }
 
-        public void Disable()
+        public override void Disable()
         {
             _inputService.MovementAxis -= OnMovementAxis;
             _inputService.RotationAxis -= OnRotationAxis;

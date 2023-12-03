@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using JetBrains.Annotations;
-using Sources.Domain;
-using Sources.Infrastructure.StateMachines.States;
-using Sources.Infrastructure.StateMachines.Transitions;
-using Sources.PresentationsInterfaces.Vievs;
+using Sources.Domain.Collectors;
+using Sources.Infrastructure.FiniteStateMachines.States;
+using Sources.PresentationsInterfaces.Views;
 
 namespace Sources.Controllers.Collectors.States
 {
@@ -21,20 +18,12 @@ namespace Sources.Controllers.Collectors.States
 
         public override void Enter()
         {
-            //TODO покашто здесь
-            _collector.CurrentCommandCenterView.TakeCrystal(_collector.TargetCrystalView);
-        
+            _collector.CommandCenter.AddExtractedResources(_collector.TargetCrystalView);
+            _collector.SetIdle(true);
             _collector.SetTarget(null);
         }
 
-        public override void Update()
-        {
-            
-        }
-
-        public override void Exit()
-        {
-            
-        }
+        public override void Exit() => 
+            _collector.CommandCenter.AddCollector(_collectorView);
     }
 }

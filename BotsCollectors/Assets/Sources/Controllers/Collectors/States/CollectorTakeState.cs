@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using JetBrains.Annotations;
-using Sources.Domain;
-using Sources.Infrastructure.StateMachines.States;
-using Sources.Infrastructure.StateMachines.Transitions;
-using Sources.PresentationsInterfaces.Vievs;
+using Sources.Domain.Collectors;
+using Sources.Infrastructure.FiniteStateMachines.States;
+using Sources.PresentationsInterfaces.Views;
+using UnityEngine;
 
-namespace Sources.Controllers.Collectors
+namespace Sources.Controllers.Collectors.States
 {
     public class CollectorTakeState : FiniteState
     {
@@ -20,21 +18,9 @@ namespace Sources.Controllers.Collectors
         }
         public override void Enter()
         {
-            //TODO из вьюшки кристалла
             _collector.TargetCrystalView.SetUnavailable();
-        
-            //TODO это тоже вьюшка кристалла но друггой метод
             _collector.TargetCrystalView.SetParent(_collectorView.CrystalTrunkPoint);
-        }
-
-        public override void Exit()
-        {
-            
-        }
-
-        public override void Update()
-        {
-            
+            _collector.TargetCrystalView.SetLocalPosition(Vector3.zero);
         }
     }
 }

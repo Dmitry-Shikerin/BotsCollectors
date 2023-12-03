@@ -1,17 +1,14 @@
-﻿using System;
-using Sources.Controllers.Collectors;
-using Sources.Infrastructure.StateMachines;
-using Sources.PresentationsInterfaces.Vievs;
+﻿using Sources.Controllers.Collectors;
+using Sources.Domain.CommandСenters;
+using Sources.PresentationsInterfaces.Views;
 using UnityEngine;
 using UnityEngine.AI;
 
 namespace Sources.Presentations.Views
 {
     [RequireComponent(typeof(NavMeshAgent))]
-    public class CollectorView : MonoBehaviour, ICollectorView
+    public class CollectorView : PresentableView<CollectorPresenter>, ICollectorView
     {
-        private CollectorPresenter _presenter;
-
         private CrystalTrunkPointView _crystalTrunkPointView;
 
         public Transform CrystalTrunkPoint => _crystalTrunkPointView.transform;
@@ -25,36 +22,25 @@ namespace Sources.Presentations.Views
             NavMeshAgent = GetComponent<NavMeshAgent>();
         }
 
-        private void Start()
-        {
-            _presenter?.Start();
-        }
+        private void Start() => 
+            Presenter?.Start();
 
-        private void Update()
-        {
-            _presenter?.Update();
-        }
+        private void Update() => 
+            Presenter?.Update();
 
-        public void Construct(CollectorPresenter presenter)
-        {
-            gameObject.SetActive(false);
-            _presenter = presenter;
-            gameObject.SetActive(true);
-        }
-
-        public void SetDestination(Vector3 destination)
-        {
+        public void SetDestination(Vector3 destination) => 
             NavMeshAgent.destination = destination;
-        }
 
-        public CrystalView GetCrystal()
-        {
-            return GetComponentInChildren<CrystalView>();
-        }
+        public CrystalView GetCrystal() => 
+            GetComponentInChildren<CrystalView>();
 
-        public void SetTarget(ICrystalView target)
-        {
-            _presenter.SetTarget(target);
-        }
+        public void SetTarget(ICrystalView target) => 
+            Presenter.SetTarget(target);
+
+        public void SetCommandCenter(CommandCenter commandCenter) => 
+            Presenter.SetCommandCenter(commandCenter);
+
+        public void SetPosition(Vector3 position) => 
+            transform.position = position;
     }
 }

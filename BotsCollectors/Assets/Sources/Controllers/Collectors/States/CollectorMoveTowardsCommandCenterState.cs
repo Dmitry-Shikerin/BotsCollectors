@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using JetBrains.Annotations;
-using Sources.Domain;
-using Sources.Infrastructure.StateMachines.States;
-using Sources.Infrastructure.StateMachines.Transitions;
-using Sources.PresentationsInterfaces.Vievs;
+using Sources.Domain.Collectors;
+using Sources.Infrastructure.FiniteStateMachines.States;
+using Sources.PresentationsInterfaces.Views;
 
 namespace Sources.Controllers.Collectors.States
 {
@@ -19,19 +16,7 @@ namespace Sources.Controllers.Collectors.States
             _collector = collector ?? throw new ArgumentNullException(nameof(collector));
         }
         
-        public override void Enter()
-        {
+        public override void Enter() => 
             _collectorView.SetDestination(_collector.ParkingPoint);
-        }
-
-        public override void Exit()
-        {
-            
-        }
-
-        public override void Update()
-        {
-            
-        }
     }
 }

@@ -254,12 +254,12 @@ NavMeshAgent:
   m_GameObject: {fileID: 3227420023016483059}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 2.1
+  m_Radius: 2.41
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 4
+  m_StoppingDistance: 5
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -617,6 +617,10 @@ PrefabInstance:
     - target: {fileID: 3918216040158914954, guid: e5d8494fdfc7dd5489085d74e4a3da02, type: 3}
       propertyPath: m_StoppingDistance
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4525479408143911837, guid: e5d8494fdfc7dd5489085d74e4a3da02, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9134102626060348683, guid: e5d8494fdfc7dd5489085d74e4a3da02, type: 3}
       propertyPath: m_Name

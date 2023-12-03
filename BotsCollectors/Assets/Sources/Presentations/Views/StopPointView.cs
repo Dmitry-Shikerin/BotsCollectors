@@ -1,18 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class StopPointView : MonoBehaviour
+namespace Sources.Presentations.Views
 {
-    // Start is called before the first frame update
-    void Start()
+    public class StopPointView : MonoBehaviour
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

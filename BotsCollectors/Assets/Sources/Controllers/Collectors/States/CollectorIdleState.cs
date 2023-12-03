@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using JetBrains.Annotations;
-using Sources.Domain;
-using Sources.Infrastructure.StateMachines.States;
-using Sources.Infrastructure.StateMachines.Transitions;
-using Sources.PresentationsInterfaces.Vievs;
-using UnityEngine;
+using Sources.Domain.Collectors;
+using Sources.Infrastructure.FiniteStateMachines.States;
+using Sources.PresentationsInterfaces.Views;
 
 namespace Sources.Controllers.Collectors.States
 {
@@ -20,19 +16,10 @@ namespace Sources.Controllers.Collectors.States
             _collector = collector ?? throw new ArgumentNullException(nameof(collector));
         }
 
-        public override void Enter()
-        {
-            Debug.Log("Коллектор в IdleState");
-        }
+        public override void Enter() => 
+            _collector.SetIdle(true);
 
-        public override void Exit()
-        {
-            
-        }
-
-        public override void Update()
-        {
-            
-        }
+        public override void Exit() => 
+            _collector.SetIdle(false);
     }
 }

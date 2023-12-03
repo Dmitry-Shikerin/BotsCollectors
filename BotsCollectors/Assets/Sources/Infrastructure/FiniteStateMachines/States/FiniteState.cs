@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using Sources.Infrastructure.StateMachines.Transitions;
+﻿using System.Collections.Generic;
+using Sources.Infrastructure.FiniteStateMachines.Transitions;
 
-namespace Sources.Infrastructure.StateMachines.States
+namespace Sources.Infrastructure.FiniteStateMachines.States
 {
     public abstract class FiniteState
     {
         private readonly List<IFiniteTransition> _transitions = new List<IFiniteTransition>();
         
-        //TODO в наследниках сделать конструкторы для получения зависимостей
         public virtual void Enter()
         {
         }
@@ -22,15 +20,11 @@ namespace Sources.Infrastructure.StateMachines.States
         {
         }
 
-        public void AddTransition(IFiniteTransition transition)
-        {
+        public void AddTransition(IFiniteTransition transition) => 
             _transitions.Add(transition);
-        }
 
-        public void RemoveTransition(IFiniteTransition transition)
-        {
+        public void RemoveTransition(IFiniteTransition transition) => 
             _transitions.Remove(transition);
-        }
 
         public bool TryGetNextState(out FiniteState nextSate)
         {

@@ -1,8 +1,8 @@
 ﻿using System;
-using JetBrains.Annotations;
 using Sources.Controllers.CameraMovements;
 using Sources.Domain.CameraMovements;
-using Sources.PresentationsInterfaces.Vievs;
+using Sources.Infrastructure.Services;
+using Sources.PresentationsInterfaces.Views;
 
 namespace Sources.Infrastructure.Factoryes.Controllers
 {
@@ -12,8 +12,8 @@ namespace Sources.Infrastructure.Factoryes.Controllers
 
         public CameraMovementPresenterFactory(InputService inputService)
         {
-            _inputService = inputService ??
-                            throw new ArgumentNullException(nameof(inputService));
+            _inputService = inputService ? inputService : 
+                throw new ArgumentNullException(nameof(inputService));
         }
 
         public CameraMovementPresenter Create

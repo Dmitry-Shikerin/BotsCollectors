@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using JetBrains.Annotations;
-using Sources.Domain;
-using Sources.Infrastructure.StateMachines.States;
-using Sources.Infrastructure.StateMachines.Transitions;
-using Sources.PresentationsInterfaces.Vievs;
-using UnityEngine;
+using Sources.Domain.Collectors;
+using Sources.Infrastructure.FiniteStateMachines.States;
+using Sources.PresentationsInterfaces.Views;
 
 namespace Sources.Controllers.Collectors.States
 {
@@ -20,20 +16,7 @@ namespace Sources.Controllers.Collectors.States
             _collector = collector ?? throw new ArgumentNullException(nameof(collector));
         }
         
-        public override void Enter()
-        {
-            Debug.Log("коллектор в MoveTowardsToCrystalState");
+        public override void Enter() => 
             _collectorView.SetDestination(_collector.TargetPosition);
-        }
-
-        public override void Exit()
-        {
-            
-        }
-
-        public override void Update()
-        {
-            
-        }
     }
 }

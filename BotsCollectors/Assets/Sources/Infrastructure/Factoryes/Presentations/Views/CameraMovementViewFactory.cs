@@ -1,9 +1,9 @@
 ﻿using System;
-using JetBrains.Annotations;
 using Sources.Controllers.CameraMovements;
 using Sources.Domain.CameraMovements;
 using Sources.Infrastructure.Factoryes.Controllers;
-using Sources.PresentationsInterfaces.Vievs;
+using Sources.Presentations.Views;
+using Sources.PresentationsInterfaces.Views;
 
 namespace Sources.Infrastructure.Factoryes.Presentations.Views
 {

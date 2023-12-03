@@ -1,8 +1,8 @@
 ﻿using Sources.Controllers.Collectors;
 using Sources.Controllers.Collectors.States;
-using Sources.Domain;
-using Sources.Infrastructure.StateMachines.Transitions;
-using Sources.PresentationsInterfaces.Vievs;
+using Sources.Domain.Collectors;
+using Sources.Infrastructure.FiniteStateMachines.Transitions;
+using Sources.PresentationsInterfaces.Views;
 using UnityEngine;
 
 namespace Sources.Infrastructure.Factoryes.Controllers
@@ -20,11 +20,9 @@ namespace Sources.Infrastructure.Factoryes.Controllers
             CollectorGiveAwayCrystalState giveAwayCrystalState =
                 new CollectorGiveAwayCrystalState(collectorView, collector);
 
-            //TODO можно ли фанк через люмбду или создать метод?
             FiniteTransitionBase toMoveTowardsCrystalTransition =
                 new FiniteTransitionBase(moveTowardsCrystalState,
-                    () => collector.IsIdle == false);
-
+                    () => collector.TargetCrystalView != null);
             idleState.AddTransition(toMoveTowardsCrystalTransition);
 
             FiniteTransitionBase toTakeTransition =
@@ -45,7 +43,7 @@ namespace Sources.Infrastructure.Factoryes.Controllers
             moveTowardsCommandCenterState.AddTransition(toGiveAwayCrystalTransition);
 
             FiniteTransitionBase toIdleTransition = new FiniteTransitionBase(
-                idleState, () => collector.IsIdle);
+                idleState, () => collector.TargetCrystalView == null);
             giveAwayCrystalState.AddTransition(toIdleTransition);
 
             CollectorPresenter collectorStateMachine = new CollectorPresenter(

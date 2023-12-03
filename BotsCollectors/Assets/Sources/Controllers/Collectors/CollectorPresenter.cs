@@ -1,13 +1,14 @@
 ﻿using System;
-using JetBrains.Annotations;
-using Sources.Domain;
-using Sources.Infrastructure.StateMachines;
-using Sources.Infrastructure.StateMachines.States;
-using Sources.PresentationsInterfaces.Vievs;
+using Sources.ControllersInterfaces;
+using Sources.Domain.Collectors;
+using Sources.Domain.CommandСenters;
+using Sources.Infrastructure.FiniteStateMachines;
+using Sources.Infrastructure.FiniteStateMachines.States;
+using Sources.PresentationsInterfaces.Views;
 
 namespace Sources.Controllers.Collectors
 {
-    public class CollectorPresenter : FiniteStateMachine
+    public class CollectorPresenter : FiniteStateMachine, IPresenter
     {
         private readonly FiniteState _firstState;
         private readonly ICollectorView _collectorView;
@@ -20,24 +21,21 @@ namespace Sources.Controllers.Collectors
             _collector = collector ?? throw new ArgumentNullException(nameof(collector));
         }
 
-        public void Start()
-        {
+        public void Start() => 
             Start(_firstState);
-        }
-        
+
         public void Enable()
         {
-            
         }
 
         public void Disable()
         {
-            
         }
 
-        public void SetTarget(ICrystalView target)
-        {
+        public void SetTarget(ICrystalView target) => 
             _collector.SetTarget(target);
-        }
+
+        public void SetCommandCenter(CommandCenter commandCenter) => 
+            _collector.SetCommandCenter(commandCenter);
     }
 }

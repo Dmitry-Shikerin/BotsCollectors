@@ -1,77 +1,62 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Sources.App.Core;
-using Sources.Domain;
 using Sources.Domain.CameraMovements;
 using Sources.Domain.CameraMovements.CameraMovementCharacteristics;
-using Sources.Domain.CollectorCharacteristics;
-using Sources.Domain.CommandSenters;
-using Sources.Infrastructure.Factoryes.AppCores;
+using Sources.Domain.CommandСenters;
 using Sources.Infrastructure.Factoryes.Controllers;
+using Sources.Infrastructure.Factoryes.Controllers.CommandCenters;
+using Sources.Infrastructure.Factoryes.Presentations.UI;
 using Sources.Infrastructure.Factoryes.Presentations.Views;
+using Sources.Infrastructure.Factoryes.Presentations.Views.CommandCenters;
 using Sources.Infrastructure.Services;
+using Sources.InfrastructureInterfaces.Factoryes;
 using Sources.Presentations.Views;
-using Sources.PresentationsInterfaces.Vievs;
+using Sources.Presentations.Views.CommandCenters;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-[DefaultExecutionOrder(-1)]
-public class Bootstrapper : MonoBehaviour
+namespace Sources.App.Bootstrapper
 {
-    [SerializeField] private CommandCenterView _commandCenterView;
-    
-    private AppCore _appCore;
-
-    private void Awake()
+    [DefaultExecutionOrder(-1)]
+    public class Bootstrapper : MonoBehaviour
     {
-        _appCore = FindObjectOfType<AppCore>() ?? new AppCoreFactory().Create();
-        
-        //TODO покашто здесь
-        LinecastService linecastService = new LinecastService();
-        
-        OverlapService overlapService = new OverlapService(linecastService);
+        [SerializeField] private CommandCenterView _commandCenterView;
+        [SerializeField] private CommandCenterUIView _commandCenterUIView; 
+    
+        private const string InputServicePath = "Prefabs/InputService";
+        private const string CameraMovementCharacteristicPath = "Configs/CameraMovementCharacteristic";
 
-        InputService inputServicePrefab = Resources.Load<InputService>("Prefabs/InputService");
-        InputService inputService = Object.Instantiate<InputService>(inputServicePrefab);
+        private void Awake()
+        {
+            LinecastService linecastService = new LinecastService();
+        
+            OverlapService overlapService = new OverlapService(linecastService);
 
-        CameraMovementCharacteristic cameraMovementCharacteristic =
-            Resources.Load<CameraMovementCharacteristic>("Configs/CameraMovementCharacteristic");
-        CameraMovement cameraMovement = new CameraMovement(cameraMovementCharacteristic);
-        CameraMovementPresenterFactory cameraMovementPresenterFactory =
-            new CameraMovementPresenterFactory(inputService);
-        CameraMovementViewFactory cameraMovementViewFactory = 
-            new CameraMovementViewFactory(cameraMovementPresenterFactory);
-        CameraMovementView cameraMovementView = FindObjectOfType<CameraMovementView>();
-        cameraMovementViewFactory.Create(cameraMovementView, cameraMovement);
-        
-        CommandCenter commandCenter = new CommandCenter();
-        //TODO заменить
-        // CommandCenterView commandCenterView = FindObjectOfType<CommandCenterView>();
-        CommandCenterPresenterFactory commandCenterPresenterFactory = 
-            new CommandCenterPresenterFactory(overlapService);
-        CommandCenterViewFactory commandCenterViewFactory = 
-            new CommandCenterViewFactory(commandCenterPresenterFactory);
-        commandCenterViewFactory.Create(_commandCenterView, commandCenter);
+            InputService inputServicePrefab = Resources.Load<InputService>(InputServicePath);
+            InputService inputService = Object.Instantiate<InputService>(inputServicePrefab);
 
-        StopPointView stopPointView = FindObjectOfType<StopPointView>();
-        CollectorView collectorViewPrefab = Resources.Load<CollectorView>("Prefabs/Collector");
-        CollectorView collectorView = Object.Instantiate(
-            collectorViewPrefab, stopPointView.transform.position, Quaternion.identity);
-        // CollectorCharacteristic collectorCharacteristic =
-        //     Resources.Load<CollectorCharacteristic>();
-        Collector collector = new Collector();
-        //TODO покашто так но потом заменю
-        collector.SetCommandCenter(_commandCenterView);
-        _commandCenterView.AddCollector(collectorView);
+            CameraMovementCharacteristic cameraMovementCharacteristic =
+                Resources.Load<CameraMovementCharacteristic>(CameraMovementCharacteristicPath);
+            CameraMovement cameraMovement = new CameraMovement(cameraMovementCharacteristic);
+            CameraMovementPresenterFactory cameraMovementPresenterFactory =
+                new CameraMovementPresenterFactory(inputService);
+            CameraMovementViewFactory cameraMovementViewFactory = 
+                new CameraMovementViewFactory(cameraMovementPresenterFactory);
+            CameraMovementView cameraMovementView = FindObjectOfType<CameraMovementView>();
+            cameraMovementViewFactory.Create(cameraMovementView, cameraMovement);
         
-        CollectorPresenterFactory collectorPresenterFactory = new CollectorPresenterFactory();
-        CollectorViewFactory collectorViewFactory = new CollectorViewFactory(
-            collectorPresenterFactory);
-        collectorViewFactory.Create(collectorView, collector);
-        
-        
-
-        //TODO в презентер базы закидываю фабрику коллекторов
+            CommandCenter commandCenter = new CommandCenter();
+            CommandCenterPresenterFactory commandCenterPresenterFactory = 
+                new CommandCenterPresenterFactory(overlapService, inputService);
+            CommandCenterViewFactory commandCenterViewFactory = 
+                new CommandCenterViewFactory(commandCenterPresenterFactory);
+            ICollectorViewFactory collectorViewFactory = new CollectorViewFactory();
+            commandCenterViewFactory.Create(_commandCenterView, commandCenter, 
+                collectorViewFactory, _commandCenterUIView);
+            
+            
+            TextUIFactory textUIFactory = new TextUIFactory();
+            CommandCenterUIViewFactory commandCenterUIViewFactory =
+                new CommandCenterUIViewFactory(textUIFactory);
+            commandCenterUIViewFactory.Create(_commandCenterUIView, commandCenter);
+        }
     }
 }

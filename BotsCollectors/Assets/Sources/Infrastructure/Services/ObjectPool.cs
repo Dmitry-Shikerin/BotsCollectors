@@ -6,11 +6,17 @@ using UnityEngine;
 
 namespace Sources.Infrastructure.Services
 {
-    public class ObjectPool<T> : MonoBehaviour, IObjectPool where T : MonoBehaviour
+    public class ObjectPool<T> : IObjectPool where T : MonoBehaviour
     {
         private readonly Queue<T> _objects = new Queue<T>();
+        private readonly Transform _parent;
 
         public event Action<int> ObjectCountChanged;
+
+        public ObjectPool()
+        {
+            _parent = new GameObject($"Pool of {typeof(T).Name}").transform;
+        }
         
         public TType Get<TType>() where TType : MonoBehaviour
         {
@@ -21,6 +27,8 @@ namespace Sources.Infrastructure.Services
             if (_objects.Dequeue() is not TType @object)
                 return null;
 
+            @object.transform.SetParent(null);
+            ObjectCountChanged?.Invoke(_objects.Count);
             return @object;
         }
 
@@ -29,6 +37,7 @@ namespace Sources.Infrastructure.Services
             if(poolableObject.TryGetComponent(out T @object) == false)
                 return;
             
+            poolableObject.transform.SetParent(_parent);
             _objects.Enqueue(@object);
             ObjectCountChanged?.Invoke(_objects.Count);
         }

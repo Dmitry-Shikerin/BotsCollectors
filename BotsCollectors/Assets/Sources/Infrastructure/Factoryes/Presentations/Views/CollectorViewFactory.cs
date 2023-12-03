@@ -2,30 +2,35 @@
 using JetBrains.Annotations;
 using Sources.Controllers.Collectors;
 using Sources.Domain;
+using Sources.Domain.Collectors;
 using Sources.Infrastructure.Factoryes.Controllers;
-using Sources.Infrastructure.StateMachines;
+using Sources.InfrastructureInterfaces.Factoryes;
 using Sources.Presentations.Views;
-using Sources.PresentationsInterfaces.Vievs;
+using Sources.PresentationsInterfaces.Views;
+using Unity.VisualScripting;
+using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Sources.Infrastructure.Factoryes.Presentations.Views
 {
-    public class CollectorViewFactory
+    public class CollectorViewFactory : ICollectorViewFactory
     {
+        private const string PrefabCollectorPath = "Prefabs/Collector";
+        
         private readonly CollectorPresenterFactory _collectorPresenterFactory;
 
-        public CollectorViewFactory(CollectorPresenterFactory collectorPresenterFactory)
+        public ICollectorView Create(ICommandCenterView commandCenterView, Vector3 spawnPosition)
         {
-            _collectorPresenterFactory = collectorPresenterFactory ?? 
-                                         throw new ArgumentNullException(nameof(collectorPresenterFactory));
-        }
+            CollectorView prefab = Resources.Load<CollectorView>(PrefabCollectorPath);
+            CollectorView collectorView = Object.Instantiate(prefab);
 
-        //TODO покашто так, потом перенесу в презентер базы
-        public ICollectorView Create(CollectorView collectorView, Collector collector)
-        {
-            CollectorPresenter collectorPresenter =
-                _collectorPresenterFactory.Create(collectorView, collector);
-            
+            Collector collector = new Collector();
+            CollectorPresenterFactory collectorPresenterFactory =
+                new CollectorPresenterFactory();
+            CollectorPresenter collectorPresenter = collectorPresenterFactory.Create(
+                collectorView, collector);
             collectorView.Construct(collectorPresenter);
+            collectorView.SetPosition(spawnPosition);
 
             return collectorView;
         }

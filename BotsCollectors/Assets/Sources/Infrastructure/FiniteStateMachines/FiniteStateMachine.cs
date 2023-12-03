@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using Sources.Infrastructure.StateMachines.States;
+﻿using Sources.Infrastructure.FiniteStateMachines.States;
 
-namespace Sources.Infrastructure.StateMachines
+namespace Sources.Infrastructure.FiniteStateMachines
 {
     public class FiniteStateMachine
     {
         private FiniteState _current;
 
-        // public FiniteStateMachine(FiniteState firstState)
-        // {
-        //     _current = firstState;
-        // }
-        
         public void Start(FiniteState startState)
         {
             MoveNextState(startState);

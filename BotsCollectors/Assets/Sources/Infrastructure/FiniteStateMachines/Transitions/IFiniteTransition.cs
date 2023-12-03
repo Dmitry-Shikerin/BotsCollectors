@@ -1,7 +1,6 @@
-﻿using System;
-using Sources.Infrastructure.StateMachines.States;
+﻿using Sources.Infrastructure.FiniteStateMachines.States;
 
-namespace Sources.Infrastructure.StateMachines.Transitions
+namespace Sources.Infrastructure.FiniteStateMachines.Transitions
 {
     public interface IFiniteTransition
     {

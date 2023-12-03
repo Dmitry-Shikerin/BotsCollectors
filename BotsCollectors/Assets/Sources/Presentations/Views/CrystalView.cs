@@ -1,53 +1,77 @@
-using System;
-using Sources.PresentationsInterfaces.Vievs;
+using Sources.Domain.Constants;
+using Sources.PresentationsInterfaces.Views;
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(NavMeshObstacle))]
-[RequireComponent(typeof(Rigidbody))]
-public class CrystalView : MonoBehaviour, ICrystalView
+namespace Sources.Presentations.Views
 {
-    private NavMeshObstacle _navMeshObstacle;
-    private Rigidbody _rigidbody;
-
-    public Vector3 Position => transform.position;
-    
-    private void Start()
+    [RequireComponent(typeof(NavMeshObstacle))]
+    [RequireComponent(typeof(Rigidbody))]
+    public class CrystalView : MonoBehaviour, ICrystalView
     {
-        _navMeshObstacle = GetComponent<NavMeshObstacle>();
-        _rigidbody = GetComponent<Rigidbody>();
-    }
+        private NavMeshObstacle _navMeshObstacle;
 
+        public Vector3 Position => transform.position;
 
-    public void SetUnavailable()
-    {
-        //TODO заменить на константу
-        _navMeshObstacle.enabled = false;
-        _rigidbody.isKinematic = true;
-    }
+        private void Awake() => 
+            _navMeshObstacle = GetComponent<NavMeshObstacle>();
 
-    public void SetParent(Transform parent)
-    {
-        transform.parent = parent.transform;
-        transform.localPosition = Vector3.zero;
-    }
+        public void SetPosition(Vector3 position) =>
+            transform.position = position;
 
-    public void RemoveParent()
-    {
-        //TODO это метод базы чтобы забрать ресурс
-        transform.parent = null;
-        transform.position = transform.position;
-        GetComponent<Rigidbody>().isKinematic = false;
-        gameObject.SetActive(false);
-    }
+        public void Destroy()
+        {
+            if (TryGetComponent(out PoolableObject poolableObject) == false)
+            {
+                Destroy(gameObject);
 
-    public void Hide()
-    {
-        gameObject.layer = 0;
-    }
+                return;
+            }
 
-    public void SetAvailable()
-    {
-        //TODO из вьюшки кристалла
+            poolableObject.ReturnTooPool();
+        }
+
+        public void SetUnavailable() => 
+            _navMeshObstacle.enabled = false;
+
+        public void SetAvailable()
+        {
+            if (_navMeshObstacle.enabled == false)
+                _navMeshObstacle.enabled = true;
+        }
+
+        public void SetParent(Transform parent)
+        {
+            if (parent == null)
+            {
+                transform.parent = null;
+
+                return;
+            }
+
+            transform.parent = parent.transform;
+        }
+
+        public void SetLocalPosition(Vector3 position) => 
+            transform.localPosition = position;
+
+        public void RemoveParent()
+        {
+            SetParent(null);
+            SetPosition(transform.position);
+            Hide();
+        }
+
+        public void Show()
+        {
+            gameObject.SetActive(true);
+            gameObject.layer = LayerMaskConstants.TouchableLayer;
+        }
+
+        public void Hide() => 
+            gameObject.SetActive(false);
+
+        public void ChangeLayerMask() =>
+            gameObject.layer = LayerMaskConstants.Default;
     }
 }

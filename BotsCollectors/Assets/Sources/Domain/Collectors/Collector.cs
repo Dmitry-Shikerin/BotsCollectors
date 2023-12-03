@@ -1,31 +1,24 @@
-﻿using System;
-using JetBrains.Annotations;
-using Sources.Domain.CollectorCharacteristics;
-using Sources.PresentationsInterfaces.Vievs;
+﻿using Sources.Domain.CommandСenters;
+using Sources.PresentationsInterfaces.Views;
 using UnityEngine;
 
-namespace Sources.Domain
+namespace Sources.Domain.Collectors
 {
     public class Collector
     {
-        private readonly CollectorCharacteristic _characteristics;
-
-        public Collector()
-        {
-        }
-
-        public bool IsIdle => TargetCrystalView == null;
-        public CommandCenterView CurrentCommandCenterView { get; private set; }
-        // public Transform CrystalTrunkPoint => _characteristics.CrystalTrunkPoint;
+        private bool _isIdle  = true;
+        public CommandCenter CommandCenter { get; private set; }
         public ICrystalView TargetCrystalView { get; private set; }
         public Vector3 TargetPosition => TargetCrystalView.Position;
-        public Vector3 ParkingPoint => CurrentCommandCenterView.ParkingPoint.transform.position;
-        
+        public Vector3 ParkingPoint => CommandCenter.ParkingPoint;
+
+        public void SetIdle(bool isIdle) => 
+            _isIdle = isIdle;
+
         public void SetTarget(ICrystalView targetCrystal)
         {
-            if (IsIdle == false)
+            if (_isIdle == false)
             {
-                Debug.Log("Коллектор занят");
                 return;
             }
 
@@ -34,12 +27,10 @@ namespace Sources.Domain
             if(targetCrystal == null)
                 return;
         
-            TargetCrystalView.Hide();
+            TargetCrystalView.ChangeLayerMask();
         }
 
-        public void SetCommandCenter(CommandCenterView commandCenter)
-        {
-            CurrentCommandCenterView = commandCenter;
-        }
+        public void SetCommandCenter(CommandCenter commandCenter) => 
+            CommandCenter = commandCenter;
     }
 }
