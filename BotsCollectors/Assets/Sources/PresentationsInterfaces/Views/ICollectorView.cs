@@ -13,7 +13,8 @@ namespace Sources.PresentationsInterfaces.Views
         
         void SetDestination(Vector3 destination);
         CrystalView GetCrystal();
-        void SetTarget(ICrystalView destination);
+        void SetCrystal(ICrystalView destination);
         void SetCommandCenter(CommandCenter commandCenter);
+        void SetFlag(FlagView flagView);
     }
 }

@@ -34,11 +34,14 @@ namespace Sources.Presentations.Views
         public CrystalView GetCrystal() => 
             GetComponentInChildren<CrystalView>();
 
-        public void SetTarget(ICrystalView target) => 
+        public void SetCrystal(ICrystalView target) => 
             Presenter.SetTarget(target);
 
         public void SetCommandCenter(CommandCenter commandCenter) => 
             Presenter.SetCommandCenter(commandCenter);
+
+        public void SetFlag(FlagView flagView) => 
+            Presenter.SetFlag(flagView);
 
         public void SetPosition(Vector3 position) => 
             transform.position = position;

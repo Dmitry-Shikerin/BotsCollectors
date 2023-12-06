@@ -1,5 +1,4 @@
 ﻿using System;
-using JetBrains.Annotations;
 using Sources.Infrastructure.FiniteStateMachines.States;
 
 namespace Sources.Infrastructure.FiniteStateMachines.Transitions
@@ -11,7 +10,7 @@ namespace Sources.Infrastructure.FiniteStateMachines.Transitions
         public FiniteTransitionBase
         (
             FiniteState nextState,
-            [NotNull] Func<bool> condition
+            Func<bool> condition
         ) : base(nextState)
         {
             _condition = condition ?? throw new ArgumentNullException(nameof(condition));

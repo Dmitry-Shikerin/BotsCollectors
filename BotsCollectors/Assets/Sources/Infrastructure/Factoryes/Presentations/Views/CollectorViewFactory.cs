@@ -3,11 +3,11 @@ using JetBrains.Annotations;
 using Sources.Controllers.Collectors;
 using Sources.Domain;
 using Sources.Domain.Collectors;
+using Sources.Infrastructure.Builders;
 using Sources.Infrastructure.Factoryes.Controllers;
 using Sources.InfrastructureInterfaces.Factoryes;
 using Sources.Presentations.Views;
 using Sources.PresentationsInterfaces.Views;
-using Unity.VisualScripting;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -25,6 +25,7 @@ namespace Sources.Infrastructure.Factoryes.Presentations.Views
             CollectorView collectorView = Object.Instantiate(prefab);
 
             Collector collector = new Collector();
+            collector.SetCommandCenterView(commandCenterView);
             CollectorPresenterFactory collectorPresenterFactory =
                 new CollectorPresenterFactory();
             CollectorPresenter collectorPresenter = collectorPresenterFactory.Create(

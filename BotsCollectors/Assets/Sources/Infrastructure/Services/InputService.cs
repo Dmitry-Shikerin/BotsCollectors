@@ -17,6 +17,8 @@ namespace Sources.Infrastructure.Services
         public event Action Scanning;
         public event Action SendCollector;
         public event Action CreatureCollector;
+        public event Action ChooseCommandCenter;
+        public event Action SettingFlagPosition;
 
         private void Awake()
         {
@@ -32,6 +34,8 @@ namespace Sources.Infrastructure.Services
             UpdateScanning();
             UpdateSendCollector();
             UpdateCreatureCollector();
+            UpdateChooseCommandCenter();
+            UpdateSettingFlagPosition();
         }
 
         private void UpdateRotation()
@@ -81,6 +85,18 @@ namespace Sources.Infrastructure.Services
         {
             if(Input.GetKeyDown(KeyCode.T))
                 CreatureCollector?.Invoke();
+        }
+
+        private void UpdateChooseCommandCenter()
+        {
+            if(Input.GetMouseButtonDown(1))
+                ChooseCommandCenter?.Invoke();
+        }
+
+        private void UpdateSettingFlagPosition()
+        {
+            if(Input.GetMouseButtonDown(0))
+                SettingFlagPosition?.Invoke();
         }
     }
 }

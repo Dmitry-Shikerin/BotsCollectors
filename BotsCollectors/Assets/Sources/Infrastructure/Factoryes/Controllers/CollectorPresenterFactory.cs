@@ -9,7 +9,8 @@ namespace Sources.Infrastructure.Factoryes.Controllers
 {
     public class CollectorPresenterFactory
     {
-        public CollectorPresenter Create(ICollectorView collectorView, Collector collector)
+        public CollectorPresenter Create(ICollectorView collectorView, 
+            Collector collector)
         {
             CollectorIdleState idleState = new CollectorIdleState(collectorView, collector);
             CollectorMoveTowardsCrystalState moveTowardsCrystalState =
@@ -20,10 +21,33 @@ namespace Sources.Infrastructure.Factoryes.Controllers
             CollectorGiveAwayCrystalState giveAwayCrystalState =
                 new CollectorGiveAwayCrystalState(collectorView, collector);
 
+            CollectorMoveTowardsFlagState moveTowardsFlagState =
+                new CollectorMoveTowardsFlagState(collectorView, collector);
+            CollectorBuildCommandCenterState collectorBuildCommandCenterState =
+                new CollectorBuildCommandCenterState(collectorView, collector);
+
             FiniteTransitionBase toMoveTowardsCrystalTransition =
                 new FiniteTransitionBase(moveTowardsCrystalState,
                     () => collector.TargetCrystalView != null);
             idleState.AddTransition(toMoveTowardsCrystalTransition);
+
+            FiniteTransitionBase toMoveTowardsFlagTransition =
+                new FiniteTransitionBase(moveTowardsFlagState,
+                    () => collector.FlagView != null);
+            idleState.AddTransition(toMoveTowardsFlagTransition);
+
+            FiniteTransitionBase toBuildCommandCenterTransition =
+                new FiniteTransitionBase(collectorBuildCommandCenterState,
+                    () => Vector3.Distance(collectorView.Position,
+                              collector.CommandCenter.FlagView.transform.position) <=
+                          collectorView.NavMeshAgent.stoppingDistance);
+            moveTowardsFlagState.AddTransition(toBuildCommandCenterTransition);
+
+            FiniteTransitionBase fromBuildCommandCenterToIdleTransition =
+                new FiniteTransitionBase(idleState,
+                    () => collector.FlagView == null);
+            collectorBuildCommandCenterState.AddTransition(
+                fromBuildCommandCenterToIdleTransition);
 
             FiniteTransitionBase toTakeTransition =
                 new FiniteTransitionBase(takeState, () =>

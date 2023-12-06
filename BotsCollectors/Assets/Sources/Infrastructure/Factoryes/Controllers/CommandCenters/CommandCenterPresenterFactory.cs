@@ -1,8 +1,10 @@
 ﻿using System;
 using Sources.Controllers.CommandCenters;
 using Sources.Domain.CommandСenters;
+using Sources.Infrastructure.Builders;
 using Sources.Infrastructure.Services;
 using Sources.InfrastructureInterfaces.Factoryes;
+using Sources.Presentations.Views;
 using Sources.PresentationsInterfaces.Views;
 
 namespace Sources.Infrastructure.Factoryes.Controllers.CommandCenters
@@ -25,7 +27,10 @@ namespace Sources.Infrastructure.Factoryes.Controllers.CommandCenters
             ICommandCenterView commandCenterView,
             CommandCenter commandCenter,
             ICollectorViewFactory collectorViewFactory,
-            ITextUI textUI
+            ITextUI textUI,
+            RayCastService rayCastService,
+            FlagView flagViewPrefab,
+            CommandCenterBuilder commandCenterBuilder
         )
         {
             return new CommandCenterPresenter
@@ -35,7 +40,10 @@ namespace Sources.Infrastructure.Factoryes.Controllers.CommandCenters
                 _overlapService,
                 collectorViewFactory,
                 textUI,
-                _inputService
+                _inputService,
+                rayCastService,
+                flagViewPrefab,
+                commandCenterBuilder
             );
         }
     }

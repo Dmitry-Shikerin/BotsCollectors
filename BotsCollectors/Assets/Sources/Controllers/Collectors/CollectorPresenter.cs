@@ -4,6 +4,7 @@ using Sources.Domain.Collectors;
 using Sources.Domain.CommandСenters;
 using Sources.Infrastructure.FiniteStateMachines;
 using Sources.Infrastructure.FiniteStateMachines.States;
+using Sources.Presentations.Views;
 using Sources.PresentationsInterfaces.Views;
 
 namespace Sources.Controllers.Collectors
@@ -37,5 +38,8 @@ namespace Sources.Controllers.Collectors
 
         public void SetCommandCenter(CommandCenter commandCenter) => 
             _collector.SetCommandCenter(commandCenter);
+
+        public void SetFlag(FlagView flagView) => 
+            _collector.SetFlag(flagView);
     }
 }

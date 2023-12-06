@@ -1,8 +1,11 @@
 ﻿using System;
 using Sources.Controllers.CommandCenters;
 using Sources.Domain.CommandСenters;
+using Sources.Infrastructure.Builders;
 using Sources.Infrastructure.Factoryes.Controllers.CommandCenters;
+using Sources.Infrastructure.Services;
 using Sources.InfrastructureInterfaces.Factoryes;
+using Sources.Presentations.Views;
 using Sources.Presentations.Views.CommandCenters;
 using Sources.PresentationsInterfaces.Views;
 
@@ -23,7 +26,10 @@ namespace Sources.Infrastructure.Factoryes.Presentations.Views.CommandCenters
             CommandCenterView commandCenterView,
             CommandCenter commandCenter,
             ICollectorViewFactory collectorViewFactory,
-            CommandCenterUIView commandCenterUIView
+            CommandCenterUIView commandCenterUIView,
+            RayCastService rayCastService,
+            FlagView flagViewPrefab,
+            CommandCenterBuilder commandCenterBuilder
         )
         {
             if (commandCenterView == null) 
@@ -35,7 +41,8 @@ namespace Sources.Infrastructure.Factoryes.Presentations.Views.CommandCenters
             CommandCenterPresenter commandCenterPresenter =
                 _commandCenterPresenterFactory.Create(
                     commandCenterView, commandCenter, collectorViewFactory,
-                    commandCenterUIView.MessageView);
+                    commandCenterUIView.MessageView, rayCastService,
+                    flagViewPrefab, commandCenterBuilder);
 
             commandCenterView.Construct(commandCenterPresenter);
 
